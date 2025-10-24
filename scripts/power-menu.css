@@ -1,0 +1,111 @@
+/* ═══════════════════════════════════════════════════════════════════
+ * Power Menu Style for Wofi
+ * Matches Waybar theme with glassmorphism effect
+ * ═══════════════════════════════════════════════════════════════════ */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+window {
+    background-color: rgba(17, 17, 27, 0.95);
+    border: 2px solid rgba(137, 180, 250, 0.5);
+    border-radius: 16px;
+    padding: 10px;
+}
+
+#input {
+    background-color: rgba(30, 30, 46, 0.9);
+    color: #cdd6f4;
+    border: 2px solid rgba(137, 180, 250, 0.3);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: 5px;
+}
+
+#input:focus {
+    border-color: #89b4fa;
+    box-shadow: 0 0 10px rgba(137, 180, 250, 0.3);
+}
+
+#inner-box {
+    background-color: transparent;
+    margin: 5px;
+}
+
+#outer-box {
+    background-color: transparent;
+}
+
+#scroll {
+    background-color: transparent;
+}
+
+#text {
+    color: #cdd6f4;
+    padding: 5px;
+}
+
+#entry {
+    background-color: rgba(49, 50, 68, 0.6);
+    color: #cdd6f4;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 4px;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+#entry:selected {
+    background-color: rgba(137, 180, 250, 0.25);
+    border-color: #89b4fa;
+    box-shadow: 0 0 15px rgba(137, 180, 250, 0.3);
+}
+
+/* Special colors for each option */
+#entry:nth-child(1):selected {
+    /* Shutdown - Red */
+    background-color: rgba(243, 139, 168, 0.25);
+    border-color: #f38ba8;
+}
+
+#entry:nth-child(2):selected {
+    /* Reboot - Orange */
+    background-color: rgba(250, 179, 135, 0.25);
+    border-color: #fab387;
+}
+
+#entry:nth-child(3):selected {
+    /* Lock - Yellow */
+    background-color: rgba(249, 226, 175, 0.25);
+    border-color: #f9e2af;
+}
+
+#entry:nth-child(4):selected {
+    /* Logout - Pink */
+    background-color: rgba(245, 194, 231, 0.25);
+    border-color: #f5c2e7;
+}
+
+#entry:nth-child(5):selected {
+    /* Suspend - Blue */
+    background-color: rgba(137, 180, 250, 0.25);
+    border-color: #89b4fa;
+}
+
+#entry:nth-child(6):selected {
+    /* Hibernate - Lavender */
+    background-color: rgba(203, 166, 247, 0.25);
+    border-color: #cba6f7;
+}
+
+#entry:hover {
+    background-color: rgba(49, 50, 68, 0.8);
+}
+
+#text:selected {
+    color: #cdd6f4;
+    font-weight: bold;
+}

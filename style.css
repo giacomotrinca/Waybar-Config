@@ -1,0 +1,419 @@
+/* ═══════════════════════════════════════════════════════════════════
+ * Waybar - Modern Dark Theme with Glassmorphism
+ * 
+ * Design: Dark theme with vibrant accents, smooth animations
+ * Style: Glassmorphism with subtle transparency and blur effects
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════
+ * COLOR PALETTE
+ * ═══════════════════════════════════════════════════════════════════ */
+
+@define-color background-primary rgba(17, 17, 27, 0.85);
+@define-color background-secondary rgba(30, 30, 46, 0.90);
+@define-color background-tertiary rgba(49, 50, 68, 0.85);
+
+@define-color foreground-primary #cdd6f4;
+@define-color foreground-secondary #bac2de;
+@define-color foreground-dim #a6adc8;
+
+@define-color accent-primary #89b4fa;
+@define-color accent-secondary #b4befe;
+@define-color accent-pink #f5c2e7;
+@define-color accent-lavender #cba6f7;
+@define-color accent-green #a6e3a1;
+@define-color accent-yellow #f9e2af;
+@define-color accent-red #f38ba8;
+@define-color accent-peach #fab387;
+
+@define-color critical #f38ba8;
+@define-color warning #f9e2af;
+@define-color success #a6e3a1;
+
+/* ═══════════════════════════════════════════════════════════════════
+ * GLOBAL STYLES
+ * ═══════════════════════════════════════════════════════════════════ */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "FiraCode Nerd Font", "Symbols Nerd Font", "Font Awesome 6 Free", "Font Awesome 6 Brands", FontAwesome, monospace;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 0;
+}
+
+window#waybar {
+    background: transparent;
+    color: @foreground-primary;
+}
+
+/* Reset button styles */
+button {
+    box-shadow: none;
+    text-shadow: none;
+    border: none;
+    background: transparent;
+}
+
+tooltip {
+    background: @background-primary;
+    border: 2px solid @accent-primary;
+    border-radius: 12px;
+    padding: 10px;
+    color: @foreground-primary;
+}
+
+tooltip label {
+    color: @foreground-primary;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * MODULE BASE STYLES
+ * ═══════════════════════════════════════════════════════════════════ */
+
+.modules-left,
+.modules-center,
+.modules-right {
+    background: @background-primary;
+    border-radius: 12px;
+    margin: 2px 0px;
+    padding: 0px 2px;
+    border: 2px solid rgba(137, 180, 250, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.modules-left:hover,
+.modules-center:hover,
+.modules-right:hover {
+    border-color: @accent-primary;
+    box-shadow: 0 0 20px rgba(137, 180, 250, 0.2);
+}
+
+.modules-left > * {
+    margin: 0px 2px;
+}
+
+.modules-center > * {
+    margin: 0px 2px;
+}
+
+.modules-right > * {
+    margin: 0px 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * LEFT MODULES
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* Custom Launcher */
+#custom-launcher {
+    color: @accent-primary;
+    font-size: 18px;
+    padding: 0px 12px;
+    margin-right: 8px;
+}
+
+#custom-launcher:hover {
+    opacity: 0.7;
+}
+
+/* Workspaces */
+#workspaces {
+    padding: 0px 5px;
+}
+
+#workspaces button {
+    padding: 0px 6px;
+    margin: 2px 2px;
+    color: @foreground-dim;
+    background: @background-tertiary;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#workspaces button:hover {
+    color: @accent-primary;
+    background: @background-secondary;
+    border: 2px solid @accent-primary;
+}
+
+#workspaces button.active {
+    color: #a6e3a1;
+    background: linear-gradient(135deg, rgba(166, 227, 161, 0.3), rgba(166, 227, 161, 0.2));
+    border: 2px solid #a6e3a1;
+    font-weight: bold;
+}
+
+#workspaces button.urgent {
+    color: @critical;
+    background: rgba(243, 139, 168, 0.2);
+    border: 2px solid @critical;
+}
+
+/* Window Title */
+#window {
+    padding: 0px 12px;
+    color: @foreground-secondary;
+    font-weight: 500;
+}
+
+#window.empty {
+    padding: 0px;
+    margin: 0px;
+    background: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * CENTER MODULE - CLOCK
+ * ═══════════════════════════════════════════════════════════════════ */
+
+#clock {
+    padding: 0px 16px;
+    color: @accent-secondary;
+    font-weight: bold;
+    font-size: 14px;
+    background: linear-gradient(135deg, rgba(137, 180, 250, 0.15), rgba(180, 190, 254, 0.15));
+    border-radius: 10px;
+    margin: 2px;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#clock:hover {
+    background: linear-gradient(135deg, rgba(137, 180, 250, 0.25), rgba(180, 190, 254, 0.25));
+    border: 2px solid @accent-primary;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * RIGHT MODULES - SYSTEM MONITORING
+ * ═══════════════════════════════════════════════════════════════════ */
+
+#cpu,
+#temperature,
+#custom-gpu-temp,
+#memory,
+#disk {
+    padding: 0px 10px;
+    border-radius: 8px;
+    margin: 2px 1px;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#cpu {
+    color: @accent-green;
+    background: rgba(166, 227, 161, 0.15);
+}
+
+#cpu:hover {
+    background: rgba(166, 227, 161, 0.25);
+    border: 2px solid @accent-green;
+}
+
+#temperature {
+    color: @accent-primary;
+    background: rgba(137, 180, 250, 0.15);
+}
+
+#temperature.cpu {
+    color: @accent-primary;
+    background: rgba(137, 180, 250, 0.15);
+}
+
+#temperature.critical {
+    color: @critical;
+    background: rgba(243, 139, 168, 0.25);
+}
+
+#temperature:hover {
+    background: rgba(137, 180, 250, 0.25);
+    border: 2px solid @accent-primary;
+}
+
+#temperature.critical:hover {
+    background: rgba(243, 139, 168, 0.35);
+    border: 2px solid @critical;
+}
+
+#custom-gpu-temp {
+    color: @accent-lavender;
+    background: rgba(203, 166, 247, 0.15);
+}
+
+#custom-gpu-temp.warning {
+    color: @warning;
+    background: rgba(249, 226, 175, 0.25);
+}
+
+#custom-gpu-temp.critical {
+    color: @critical;
+    background: rgba(243, 139, 168, 0.25);
+}
+
+#custom-gpu-temp:hover {
+    background: rgba(203, 166, 247, 0.25);
+    border: 2px solid @accent-lavender;
+}
+
+#custom-gpu-temp.warning:hover {
+    background: rgba(249, 226, 175, 0.35);
+    border: 2px solid @warning;
+}
+
+#custom-gpu-temp.critical:hover {
+    background: rgba(243, 139, 168, 0.35);
+    border: 2px solid @critical;
+}
+
+#memory {
+    color: @accent-yellow;
+    background: rgba(249, 226, 175, 0.15);
+}
+
+#memory:hover {
+    background: rgba(249, 226, 175, 0.25);
+    border: 2px solid @accent-yellow;
+}
+
+#disk {
+    color: @accent-peach;
+    background: rgba(250, 179, 135, 0.15);
+}
+
+#disk:hover {
+    background: rgba(250, 179, 135, 0.25);
+    border: 2px solid @accent-peach;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * RIGHT MODULES - CONNECTIVITY
+ * ═══════════════════════════════════════════════════════════════════ */
+
+#pulseaudio {
+    padding: 0px 10px;
+    color: @accent-pink;
+    background: rgba(245, 194, 231, 0.15);
+    border-radius: 8px;
+    margin: 2px 1px;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#pulseaudio:hover {
+    background: rgba(245, 194, 231, 0.25);
+    border: 2px solid @accent-pink;
+}
+
+#pulseaudio.muted {
+    color: @foreground-dim;
+    background: rgba(49, 50, 68, 0.5);
+}
+
+#network {
+    padding: 0px 10px;
+    color: @accent-primary;
+    background: rgba(137, 180, 250, 0.15);
+    border-radius: 8px;
+    margin: 2px 1px;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#network:hover {
+    background: rgba(137, 180, 250, 0.25);
+    border: 2px solid @accent-primary;
+}
+
+#network.disconnected {
+    color: @critical;
+    background: rgba(243, 139, 168, 0.15);
+}
+
+#battery {
+    padding: 0px 10px;
+    color: @accent-green;
+    background: rgba(166, 227, 161, 0.15);
+    border-radius: 8px;
+    margin: 2px 1px;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#battery:hover {
+    background: rgba(166, 227, 161, 0.25);
+    border: 2px solid @accent-green;
+}
+
+#battery.charging {
+    color: @accent-green;
+}
+
+#battery.warning:not(.charging) {
+    color: @warning;
+    background: rgba(249, 226, 175, 0.15);
+}
+
+#battery.critical:not(.charging) {
+    color: @critical;
+    background: rgba(243, 139, 168, 0.15);
+}
+
+#tray {
+    padding: 0px 8px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * CUSTOM MODULES
+ * ═══════════════════════════════════════════════════════════════════ */
+
+#custom-weather {
+    padding: 0px 10px;
+    color: @accent-lavender;
+    background: rgba(203, 166, 247, 0.15);
+    border-radius: 8px;
+    margin: 2px 1px;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#custom-weather:hover {
+    background: rgba(203, 166, 247, 0.25);
+    border: 2px solid @accent-lavender;
+}
+
+#custom-power {
+    padding: 0px 10px;
+    margin-left: 4px;
+    color: @critical;
+    font-size: 15px;
+    background: rgba(243, 139, 168, 0.15);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#custom-power:hover {
+    background: rgba(243, 139, 168, 0.3);
+    border: 2px solid @critical;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * ANIMATIONS AND TRANSITIONS
+ * ═══════════════════════════════════════════════════════════════════ */
+
+* {
+    transition-property: background, color, box-shadow, border;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+window#waybar {
+    opacity: 1;
+}
