@@ -22,8 +22,7 @@
 
 ---
 
-<!-- Add your screenshot here -->
-<!-- ![Waybar Preview](./assets/screenshot.png) -->
+![Waybar Preview](./screenshots/screenshot_bar.png)
 
 </div>
 
@@ -335,13 +334,19 @@ The configuration uses a **Catppuccin-inspired** color palette:
 
 ## 📸 Screenshots
 
-> **Note:** Add your screenshots here!
+### Main Bar
+![Waybar Main](./screenshots/screenshot_bar.png)
 
-```markdown
-![Main Bar](./assets/waybar-main.png)
-![Power Menu](./assets/power-menu.png)
-![Hover Effects](./assets/hover-demo.gif)
-```
+The bar features a clean, modern design with:
+- Dynamic workspaces that only show when active
+- Color-coded modules for easy identification
+- Real-time system monitoring (CPU, GPU, Memory, Disk)
+- Beautiful glassmorphism effects with rounded corners
+- Smooth hover animations on all modules
+
+<!-- Add more screenshots here -->
+<!-- ![Power Menu](./screenshots/power-menu.png) -->
+<!-- ![Hover Effects](./screenshots/hover-demo.gif) -->
 
 ## 🤝 Contributing
 
