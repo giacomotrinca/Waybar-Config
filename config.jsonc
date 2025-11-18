@@ -35,6 +35,7 @@
         "battery",
         "tray",
         "custom/weather",
+        "custom/power-profile",
         "custom/power"
     ],
     
@@ -61,7 +62,6 @@
     
     "hyprland/window": {
         "format": "{}",
-        "max-length": 50,
         "separate-outputs": true,
         "rewrite": {
             "(.*) — Mozilla Firefox": "🌍 $1",
@@ -110,7 +110,6 @@
     "cpu": {
         "interval": 2,
         "format": "󰻠 {usage}%",
-        "max-length": 10,
         "on-click": "kitty -e htop"
     },
     
@@ -134,7 +133,6 @@
     "memory": {
         "interval": 2,
         "format": "󰍛 {percentage}%",
-        "max-length": 10,
         "tooltip-format": "RAM: {used:0.1f}G / {total:0.1f}G\nSwap: {swapUsed:0.1f}G / {swapTotal:0.1f}G",
         "on-click": "kitty -e htop"
     },
@@ -209,6 +207,15 @@
         "interval": 1800,
         "tooltip": true,
         "on-click": "xdg-open https://weather.com"
+    },
+
+    "custom/power-profile": {
+        "exec": "~/.config/waybar/scripts/power-profile.sh",
+        "return-type": "json",
+        "interval": 10,
+        "signal": 9,
+        "on-click": "~/.config/waybar/scripts/power-profile.sh --toggle",
+        "on-click-right": "kitty -e sh -lc 'powerprofilesctl list'"
     },
     
     "custom/power": {
