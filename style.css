@@ -388,6 +388,41 @@ tooltip label {
     border: 2px solid @accent-lavender;
 }
 
+#custom-power-profile {
+    padding: 0px 10px;
+    margin: 2px 1px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background: rgba(249, 226, 175, 0.15);
+    color: @accent-yellow;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#custom-power-profile:hover {
+    background: rgba(249, 226, 175, 0.25);
+    border: 2px solid @accent-yellow;
+}
+
+#custom-power-profile.performance {
+    color: @critical;
+    background: rgba(243, 139, 168, 0.2);
+}
+
+#custom-power-profile.performance:hover {
+    background: rgba(243, 139, 168, 0.3);
+    border: 2px solid @critical;
+}
+
+#custom-power-profile.power-saver {
+    color: @accent-green;
+    background: rgba(166, 227, 161, 0.15);
+}
+
+#custom-power-profile.power-saver:hover {
+    background: rgba(166, 227, 161, 0.25);
+    border: 2px solid @accent-green;
+}
+
 #custom-power {
     padding: 0px 10px;
     margin-left: 4px;
