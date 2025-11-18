@@ -33,6 +33,7 @@
 - ✨ **Smooth Animations** - Fluid transitions and hover effects on all modules
 - 🎯 **Dynamic Workspaces** - Only shows active workspaces with color-coded indicators
 - 🌡️ **Temperature Monitoring** - Real-time CPU and GPU temperature tracking with color alerts
+- ⚡ **Power Profile Control** - Switch between performance, balanced, and power-saver modes on the fly
 - 📱 **Responsive Layout** - Compact design that maximizes screen real estate
 - 🔧 **Custom Power Menu** - Beautiful wofi-powered shutdown/reboot menu
 - 🌤️ **Weather Integration** - Real-time weather information from wttr.in
@@ -56,6 +57,7 @@ pavucontrol          # Audio control GUI
 networkmanager       # Network management
 htop                 # System monitor
 nvidia-smi           # NVIDIA GPU monitoring (for GPU temp module)
+powerprofilesctl     # Power profile daemon CLI (power-profiles-daemon)
 ```
 
 ### Optional
@@ -127,10 +129,11 @@ exec-once = waybar
 - 🧠 RAM usage
 - 💾 Disk usage
 - 🔊 Audio (PulseAudio)
-- � Network
+- 📡 Network
 - 🔋 Battery
 - 📦 System tray
 - 🌤️ Weather (custom)
+- ⚡ Power profile (custom)
 - ⏻ Power menu (custom)
 
 ### Right Section
@@ -139,6 +142,7 @@ exec-once = waybar
 | **CPU** | 󰻠 | Processor usage | Open htop |
 | **CPU Temp** | 󰔏 | CPU temperature monitor | - |
 | **GPU Temp** | 󰢮 | NVIDIA GPU temperature | Open nvidia-settings |
+| **Power Profile** | 󰔚 | CPU power mode (cycle) | Cycle performance/balanced/saver |
 | **Memory** | 󰍛 | RAM usage | Open htop |
 | **Disk** | 󰋊 | Storage usage | - |
 | **Audio** | 󰕾 | Volume control | Open pavucontrol |
@@ -251,6 +255,18 @@ Features:
 
 **Note:** If you don't have an NVIDIA GPU, you can remove the `custom/gpu-temp` module from the configuration.
 
+## ⚡ Power Profile Control
+
+- Uses `powerprofilesctl` from `power-profiles-daemon`
+- Left click cycles through **Balanced → Performance → Power Saver**
+- Right click opens the list of available profiles in the terminal
+- Color-coded states:
+  - 🟡 Balanced: accent yellow background
+  - 🔴 Performance: critical red background
+  - 🟢 Power Saver: green background
+- Configure behaviour in `custom/power-profile` inside `config.jsonc`
+- Style overrides are available via `#custom-power-profile` selectors in `style.css`
+
 ## 🔧 Troubleshooting
 
 ### Waybar won't start
@@ -279,6 +295,16 @@ chmod +x ~/.config/waybar/scripts/*.sh
 
 # Check dependencies
 which jq curl nvidia-smi
+```
+
+### Power profile control not working
+```bash
+# Verify power-profiles-daemon is running
+systemctl status power-profiles-daemon
+
+# Test the CLI manually
+powerprofilesctl get
+powerprofilesctl list
 ```
 
 ### GPU temperature not showing
@@ -313,6 +339,7 @@ ls -la /sys/class/hwmon/
 ├── README.md                 # This file
 └── scripts/
     ├── weather.sh            # Weather data fetcher
+  ├── power-profile.sh      # Power profile toggler
     ├── gpu-temp.sh           # GPU temperature monitor
     ├── power-menu.sh         # Power menu script
     └── power-menu.css        # Power menu styling
