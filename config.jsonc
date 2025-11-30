@@ -28,10 +28,12 @@
         "cpu",
         "temperature#cpu",
         "custom/gpu-temp",
-        "memory",
+        "custom/memory",
         "disk",
+        "custom/brightness",
         "pulseaudio",
         "network",
+        "idle_inhibitor",
         "battery",
         "tray",
         "custom/weather",
@@ -130,13 +132,6 @@
         "on-click": "nvidia-settings"
     },
     
-    "memory": {
-        "interval": 2,
-        "format": "󰍛 {percentage}%",
-        "tooltip-format": "RAM: {used:0.1f}G / {total:0.1f}G\nSwap: {swapUsed:0.1f}G / {swapTotal:0.1f}G",
-        "on-click": "kitty -e htop"
-    },
-    
     "disk": {
         "interval": 30,
         "format": "󰋊 {percentage_used}%",
@@ -163,7 +158,8 @@
         "scroll-step": 5,
         "on-click": "pavucontrol",
         "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-        "tooltip-format": "{desc}\n{volume}%"
+        "tooltip-format": "{desc}\n{volume}%",
+        "swap-icon-label": false
     },
     
     "network": {
@@ -175,7 +171,17 @@
         "tooltip-format-wifi": "󰖩  {essid} ({signalStrength}%)\n⇣ {bandwidthDownBytes}  ⇡ {bandwidthUpBytes}",
         "tooltip-format-ethernet": "󰈀 {ifname}\n⇣ {bandwidthDownBytes}  ⇡ {bandwidthUpBytes}",
         "tooltip-format-disconnected": "Disconnected",
-        "on-click": "nm-connection-editor"
+        "on-click": "nm-connection-editor",
+        "swap-icon-label": false
+    },
+
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "󰅶",
+            "deactivated": "󰒲"
+        },
+        "tooltip-format": "Idle inhibitor: {status}"
     },
     
     "battery": {
@@ -188,7 +194,8 @@
         "format-charging": "󰂄 {capacity}%",
         "format-plugged": "󰚥 {capacity}%",
         "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-        "tooltip-format": "{timeTo}\nPower: {power}W"
+        "tooltip-format": "{timeTo}\nPower: {power}W",
+        "swap-icon-label": false
     },
     
     "tray": {
@@ -201,8 +208,26 @@
     // CUSTOM MODULES
     // ═══════════════════════════════════════════════════════════
     
+    "custom/memory": {
+        "exec": "~/.config/waybar/scripts/memory.sh",
+        "return-type": "json",
+        "interval": 3,
+        "signal": 10,
+        "on-click": "kitty -e htop"
+    },
+
+    "custom/brightness": {
+        "exec": "~/.config/waybar/scripts/brightness.sh",
+        "return-type": "json",
+        "interval": 1,
+        "signal": 11,
+        "tooltip": true,
+        "on-scroll-up": "~/.config/waybar/scripts/brightness.sh --inc",
+        "on-scroll-down": "~/.config/waybar/scripts/brightness.sh --dec"
+    },
+
     "custom/weather": {
-        "exec": "~/.config/waybar/scripts/weather.sh",
+        "exec": "~/.config/waybar/scripts/weather.sh Rome",
         "return-type": "json",
         "interval": 1800,
         "tooltip": true,

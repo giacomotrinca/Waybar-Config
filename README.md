@@ -34,6 +34,8 @@
 - 🎯 **Dynamic Workspaces** - Only shows active workspaces with color-coded indicators
 - 🌡️ **Temperature Monitoring** - Real-time CPU and GPU temperature tracking with color alerts
 - ⚡ **Power Profile Control** - Switch between performance, balanced, and power-saver modes on the fly
+- ☀️ **Backlight Control** - Adjust screen brightness directly from the bar with scroll and notifications
+- 💤 **Idle Inhibitor Toggle** - Keep the system awake for long builds or presentations with one click
 - 📱 **Responsive Layout** - Compact design that maximizes screen real estate
 - 🔧 **Custom Power Menu** - Beautiful wofi-powered shutdown/reboot menu
 - 🌤️ **Weather Integration** - Real-time weather information from wttr.in
@@ -58,6 +60,9 @@ networkmanager       # Network management
 htop                 # System monitor
 nvidia-smi           # NVIDIA GPU monitoring (for GPU temp module)
 powerprofilesctl     # Power profile daemon CLI (power-profiles-daemon)
+libnotify            # Desktop notifications for profile changes
+brightnessctl        # Backlight control utility
+lm_sensors           # Sensor readings for non-NVIDIA GPUs
 ```
 
 ### Optional
@@ -92,12 +97,12 @@ chmod +x ~/.config/waybar/scripts/*.sh
 ### 4. Install Dependencies
 **Arch Linux:**
 ```bash
-sudo pacman -S waybar wofi ttf-jetbrains-mono-nerd jq curl pavucontrol networkmanager
+sudo pacman -S waybar wofi ttf-jetbrains-mono-nerd jq curl pavucontrol networkmanager brightnessctl lm_sensors libnotify
 ```
 
 **Ubuntu/Debian:**
 ```bash
-sudo apt install waybar wofi curl jq pavucontrol network-manager
+sudo apt install waybar wofi curl jq pavucontrol network-manager brightnessctl lm-sensors libnotify-bin
 # Install Nerd Fonts manually from https://www.nerdfonts.com/
 ```
 
@@ -126,10 +131,12 @@ exec-once = waybar
 - 💻 CPU usage
 - 🌡️ CPU temperature
 - 🎮 GPU temperature (NVIDIA)
-- 🧠 RAM usage
+- 🧠 RAM usage + top processes tooltip
 - 💾 Disk usage
+- ☀️ Screen brightness control (scroll)
 - 🔊 Audio (PulseAudio)
 - 📡 Network
+- 💤 Idle inhibitor toggle
 - 🔋 Battery
 - 📦 System tray
 - 🌤️ Weather (custom)
@@ -142,11 +149,13 @@ exec-once = waybar
 | **CPU** | 󰻠 | Processor usage | Open htop |
 | **CPU Temp** | 󰔏 | CPU temperature monitor | - |
 | **GPU Temp** | 󰢮 | NVIDIA GPU temperature | Open nvidia-settings |
-| **Power Profile** | 󰔚 | CPU power mode (cycle) | Cycle performance/balanced/saver |
-| **Memory** | 󰍛 | RAM usage | Open htop |
+| **Memory** | 󰍛 | RAM usage + top processes tooltip | Open htop |
 | **Disk** | 󰋊 | Storage usage | - |
+| **Power Profile** | 󰔚 | CPU power mode (cycle) | Cycle performance/balanced/saver |
+| **Brightness** | 󰃠 | Screen backlight control (scroll) | Adjust brightness |
 | **Audio** | 󰕾 | Volume control | Open pavucontrol |
 | **Network** | 󰖩 | Connection status | Open network manager |
+| **Idle Inhibitor** | 󰅶 | Toggle sleep block | Toggle inhibitor |
 | **Battery** | 󰁹 | Battery level | - |
 | **Tray** | - | System tray | - |
 | **Weather** | - | Current weather | Open weather.com |
@@ -190,7 +199,15 @@ Edit `~/.config/waybar/config.jsonc`:
 Edit `~/.config/waybar/scripts/weather.sh`:
 
 ```bash
-LOCATION="YourCity"  # Change to your city name
+# Ways to set the location the script will report for:
+# 1) Pass a city name as the first argument in the Waybar exec line
+#    Example in `config.jsonc`:
+#    "custom/weather": { "exec": "~/.config/waybar/scripts/weather.sh Rome", ... }
+# 2) Export an environment variable before launching Waybar:
+#    `export WAYBAR_WEATHER_LOCATION=Rome && waybar &`
+# 3) Edit the script directly and set `LOCATION="YourCity"`
+
+LOCATION="YourCity"  # Change to your city name (fallback if arg/env not provided)
 ```
 
 ### Bar Height & Spacing
@@ -252,8 +269,9 @@ Features:
   - Power draw
 - Click to open `nvidia-settings`
 - Color-coded alerts matching CPU temperature zones
+- Fallbacks to `lm_sensors` for iGPU/AMD cards (run `sudo sensors-detect` once to configure)
 
-**Note:** If you don't have an NVIDIA GPU, you can remove the `custom/gpu-temp` module from the configuration.
+**Note:** The module auto-hides if no GPU telemetry is detected (e.g. pure Intel iGPU). You can still remove `custom/gpu-temp` from `config.jsonc` if you prefer to keep the bar minimal.
 
 ## ⚡ Power Profile Control
 
@@ -264,8 +282,30 @@ Features:
   - 🟡 Balanced: accent yellow background
   - 🔴 Performance: critical red background
   - 🟢 Power Saver: green background
+- Sends a desktop notification summarizing the profile switch (requires `libnotify`)
 - Configure behaviour in `custom/power-profile` inside `config.jsonc`
 - Style overrides are available via `#custom-power-profile` selectors in `style.css`
+
+## 🧠 Memory Insights
+
+- Replaces the default Waybar memory widget with a custom script
+- Tooltip lists the top three processes by RAM usage (updated every few seconds)
+- Shares the same iconography and hover effects as the original module
+- Emits warning/critical classes above 75% / 90% usage, picked up by CSS colors
+
+## ☀️ Backlight Control
+
+- Powered by `brightnessctl` with scroll-to-adjust behaviour
+- Left/right scroll events trigger immediate refreshes and desktop notifications (requires `libnotify`)
+- Tooltip shows raw brightness values (current/max) and detected device
+- Styles adapt automatically when the screen is extremely dim or near 100%
+
+## 💤 Idle Inhibitor
+
+- Toggle module prevents the compositor from triggering idle actions (sleep/lock)
+- Left click switches between **deactivated** and **activated** states
+- Tooltip reports the current status via Waybar's `{status}` placeholder
+- Styled alongside other system controls with matching hover effects
 
 ## 🔧 Troubleshooting
 
@@ -330,6 +370,11 @@ ls -la /sys/class/hwmon/
 - Verify dependencies are installed
 - Check waybar logs: `journalctl -u waybar -f`
 
+### Warning: `swap-icon-label` must be a bool
+- Waybar expects a boolean for this property when present
+- The configuration now pins `swap-icon-label: false` on relevant modules
+- If you add new modules with `format-icons`, ensure the value remains `true` or `false` (not a string)
+
 ## 📁 File Structure
 
 ```
@@ -339,7 +384,9 @@ ls -la /sys/class/hwmon/
 ├── README.md                 # This file
 └── scripts/
     ├── weather.sh            # Weather data fetcher
-  ├── power-profile.sh      # Power profile toggler
+    ├── power-profile.sh      # Power profile toggler
+  ├── brightness.sh         # Screen brightness control
+  ├── memory.sh             # Memory stats + top processes
     ├── gpu-temp.sh           # GPU temperature monitor
     ├── power-menu.sh         # Power menu script
     └── power-menu.css        # Power menu styling

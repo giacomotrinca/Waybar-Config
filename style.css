@@ -190,8 +190,9 @@ tooltip label {
 #cpu,
 #temperature,
 #custom-gpu-temp,
-#memory,
-#disk {
+#custom-memory,
+#disk,
+#custom-brightness {
     padding: 0px 10px;
     border-radius: 8px;
     margin: 2px 1px;
@@ -239,6 +240,16 @@ tooltip label {
     background: rgba(203, 166, 247, 0.15);
 }
 
+#custom-gpu-temp.hidden {
+    opacity: 0;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: transparent;
+}
+
 #custom-gpu-temp.warning {
     color: @warning;
     background: rgba(249, 226, 175, 0.25);
@@ -264,14 +275,60 @@ tooltip label {
     border: 2px solid @critical;
 }
 
-#memory {
+#custom-memory {
     color: @accent-yellow;
     background: rgba(249, 226, 175, 0.15);
 }
 
-#memory:hover {
+#custom-memory.warning {
+    color: @warning;
+    background: rgba(249, 226, 175, 0.25);
+}
+
+#custom-memory.critical {
+    color: @critical;
+    background: rgba(243, 139, 168, 0.2);
+}
+
+#custom-memory:hover {
     background: rgba(249, 226, 175, 0.25);
     border: 2px solid @accent-yellow;
+}
+
+#custom-memory.warning:hover {
+    border: 2px solid @warning;
+}
+
+#custom-memory.critical:hover {
+    border: 2px solid @critical;
+}
+
+#custom-brightness {
+    color: @accent-peach;
+    background: rgba(250, 179, 135, 0.15);
+}
+
+#custom-brightness.dim {
+    color: @foreground-dim;
+    background: rgba(49, 50, 68, 0.5);
+}
+
+#custom-brightness.bright {
+    color: @accent-peach;
+    background: rgba(250, 179, 135, 0.25);
+}
+
+#custom-brightness:hover {
+    background: rgba(250, 179, 135, 0.25);
+    border: 2px solid @accent-peach;
+}
+
+#custom-brightness.dim:hover {
+    border: 2px solid @foreground-dim;
+}
+
+#custom-brightness.bright:hover {
+    border: 2px solid @accent-peach;
 }
 
 #disk {
@@ -326,6 +383,30 @@ tooltip label {
 #network.disconnected {
     color: @critical;
     background: rgba(243, 139, 168, 0.15);
+}
+
+#idle_inhibitor {
+    padding: 0px 10px;
+    margin: 2px 1px;
+    border-radius: 8px;
+    color: @accent-lavender;
+    background: rgba(203, 166, 247, 0.15);
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#idle_inhibitor:hover {
+    background: rgba(203, 166, 247, 0.25);
+    border: 2px solid @accent-lavender;
+}
+
+#idle_inhibitor.activated {
+    color: @accent-green;
+    background: rgba(166, 227, 161, 0.2);
+}
+
+#idle_inhibitor.activated:hover {
+    border: 2px solid @accent-green;
 }
 
 #battery {

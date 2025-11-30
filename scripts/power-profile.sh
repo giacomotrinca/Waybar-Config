@@ -6,6 +6,16 @@
 PROFILES=("balanced" "performance" "power-saver")
 SIGNAL=9
 WAYBAR_BIN=waybar
+NOTIFIER=$(command -v notify-send)
+
+send_notification() {
+    local title="$1"
+    local body="$2"
+
+    if [ -n "$NOTIFIER" ]; then
+        "$NOTIFIER" -a "Waybar" "$title" "$body"
+    fi
+}
 
 powerprofilesctl_cmd() {
     if ! command -v powerprofilesctl >/dev/null 2>&1; then
@@ -66,30 +76,38 @@ emit_status() {
 
 cycle_profile() {
     if ! powerprofilesctl_cmd; then
+        send_notification "Power Profile" "powerprofilesctl unavailable"
         exit 1
     fi
 
-    local current next idx
+    local current next_idx next_profile idx
     current=$(current_profile)
     if [[ -z "$current" ]]; then
+        send_notification "Power Profile" "unable to read current profile"
         exit 1
     fi
 
     for idx in "${!PROFILES[@]}"; do
         if [[ "${PROFILES[$idx]}" == "$current" ]]; then
-            next=$(( (idx + 1) % ${#PROFILES[@]} ))
+            next_idx=$(( (idx + 1) % ${#PROFILES[@]} ))
             break
         fi
     done
 
-    if [[ -z "$next" ]]; then
-        next=0
+    if [[ -z "$next_idx" ]]; then
+        next_idx=0
     fi
 
-    powerprofilesctl set "${PROFILES[$next]}" >/dev/null 2>&1
+    next_profile="${PROFILES[$next_idx]}"
 
-    # Trigger Waybar refresh
-    pkill -RTMIN+$SIGNAL "$WAYBAR_BIN" 2>/dev/null
+    if powerprofilesctl set "$next_profile" >/dev/null 2>&1; then
+        pkill -RTMIN+$SIGNAL "$WAYBAR_BIN" 2>/dev/null
+        send_notification "Power Profile" "$(pretty_name "$current") → $(pretty_name "$next_profile")"
+    else
+        send_notification "Power Profile" "failed to set $(pretty_name "$next_profile")"
+        exit 1
+    fi
+
 }
 
 case "$1" in
